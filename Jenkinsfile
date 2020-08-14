@@ -1,8 +1,13 @@
 pipeline {
    agent any
+   environment {
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+        AWS_DEFAULT_REGION    = "us-east-1"
+    }
 
    stages {
-      stage('Github') {
+      stage('Git') {
          steps {
             git 'https://github.com/rakeshragipani/node-js-sample.git'
          }
@@ -12,20 +17,42 @@ pipeline {
          steps{
             sh '''
             npm install 
-            zip -r masterfile.zip ./*
+            zip -r master.zip ./*
             '''
          }
       }
+      stage("Set Terraform path") {
+		steps {
+			script {
+				def tfHome = tool name: 'Terraform11'
+				env.PATH = "${tfHome}:${env.PATH}"
+			}
+			sh 'terraform --version'
+		 }
+	  }
       
       stage('deploy to lambda') {
           steps{
             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'ed10dcb8-44af-46dd-90cc-6c368d564a97', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
             sh '''
-            aws lambda create-function --function-name masterlambda  --zip-file fileb://masterfile.zip --handler index.handler --runtime nodejs12.x  --role arn:aws:iam::246944263478:role/lambdarole --region us-east-1
+            if(aws lambda list-functions --region us-east-1 | grep FunctionName | grep masterlambda | wc -l)
+            #if (terraform output -json lambda_arn | jq '.value' = "arn:aws:lambda:us-east-1:246944263478:function:welcome-nodejs" )
+            then
+                cd lambda-update-tf
+                terraform init
+                #terraform plan -out=lambda
+                terraform plan .
+                terraform apply lambda
+                #terraform destroy -auto-approve
+            else
+                cd lambda-tf
+                terraform init
+                terraform plan -out=lambda
+                terraform apply lambda
+                #terraform destroy -auto-approve
+            fi
+
             
-            aws lambda publish-version --function-name masterlambda --region us-east-1
-            VERSION=$(aws lambda publish-version --function-name masterlambda --region us-east-1 | jq -r .Version)
-            aws lambda create-alias --function-name masterlambda --name master --function-version $VERSION --region us-east-1
             '''
          
             }
