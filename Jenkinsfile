@@ -41,7 +41,7 @@ pipeline {
                 cd lambda-tf
                 terraform init
                 #terraform plan -out=lambda
-                terraform plan .
+                terraform plan -out=lambda
                 terraform apply lambda
                 #terraform destroy -auto-approve
             else
