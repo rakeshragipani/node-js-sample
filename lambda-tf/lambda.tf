@@ -10,7 +10,7 @@ data "archive_file" "welcome" {
 
 resource "aws_lambda_function" "test_lambda" {
   filename      = "${local.lambda_zip_location}"
-  function_name = "welcome-nodejs"
+  function_name = "masterbranch"
   role          = "${aws_iam_role.iam_for_lambda.arn}"
   handler       = "index.handler"
  
