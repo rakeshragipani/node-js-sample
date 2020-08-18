@@ -9,7 +9,7 @@ pipeline {
    stages {
       stage('Git') {
          steps {
-            git 'https://github.com/rakeshragipani/node-js-sample.git'
+            git branch: 'Development', url: 'https://github.com/rakeshragipani/node-js-sample.git'
          }
       }
       
