@@ -65,7 +65,7 @@ variable "description" {
 variable "function_name" {
   description = "The function ARN of the Lambda function for which you want to create an alias."
   type        = string
-  default     = "Developmentbranch"
+  default     = "masterbranch"
 }
 
 variable "function_version" {
