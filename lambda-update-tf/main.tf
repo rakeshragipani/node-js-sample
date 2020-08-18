@@ -31,7 +31,7 @@ resource "aws_lambda_alias" "no_refresh" {
 resource "aws_lambda_alias" "with_refresh" {
   count = var.create && ! var.use_existing_alias && var.refresh_alias ? 1 : 0
 
-  name        = "masteraliasname"
+  name        = "Developmentaliasname"
   description = "created new alias in lambda function"
 
   function_name    = var.function_name
