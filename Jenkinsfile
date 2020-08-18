@@ -38,7 +38,7 @@ pipeline {
              if (( $(aws lambda list-functions --region us-east-1 | grep FunctionName | grep masterbranch | wc -l) > 0 ))
             #if (terraform output -json lambda_arn | jq '.value' = "arn:aws:lambda:us-east-1:246944263478:function:welcome-nodejs" )
             then
-                cd lambda-tf
+                cd lambda-update-tf
                 terraform init
                 #terraform plan -out=lambda
                 terraform plan -out=lambda
