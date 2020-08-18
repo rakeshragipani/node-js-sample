@@ -1,5 +1,5 @@
 locals {
-  lambda_zip_location = "output/welcome.zip"
+  lambda_zip_location = "output/masterbranch.zip"
 }
  
 data "archive_file" "welcome" {
@@ -10,8 +10,8 @@ data "archive_file" "welcome" {
 
 resource "aws_lambda_function" "test_lambda" {
   filename      = "${local.lambda_zip_location}"
-  function_name = "masterbranch1"
-  role          = "${aws_iam_role.iam_for_lambda.arn}"
+  function_name = "masterbranch"
+  role          = "${aws_iam_role.iam_for_masterlambda.arn}"
   handler       = "index.handler"
  
   source_code_hash = "${base64sha256(local.lambda_zip_location)}"
