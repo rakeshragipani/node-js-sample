@@ -17,7 +17,7 @@ pipeline {
          steps{
             sh '''
             npm install 
-            zip -r master.zip ./*
+            zip -r Developmentlambda.zip ./*
             '''
          }
       }
