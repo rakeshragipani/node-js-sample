@@ -10,8 +10,8 @@ data "archive_file" "welcome" {
 
 resource "aws_lambda_function" "test_lambda" {
   filename      = "${local.lambda_zip_location}"
-  function_name = "masterbranch"
-  role          = "${aws_iam_role.iam_for_masterlambda.arn}"
+  function_name = "Developmentbranch"
+  role          = "${aws_iam_role.iam_for_Developmentlambda.arn}"
   handler       = "index.handler"
  
   source_code_hash = "${base64sha256(local.lambda_zip_location)}"
