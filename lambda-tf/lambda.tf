@@ -1,5 +1,5 @@
 locals {
-  lambda_zip_location = "output/masterbranch.zip"
+  lambda_zip_location = "output/Developmentrbranch.zip"
 }
  
 data "archive_file" "welcome" {
